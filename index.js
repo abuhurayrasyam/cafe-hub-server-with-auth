@@ -29,11 +29,19 @@ async function run() {
     const coffeesCollection = client.db("coffeesdb");
     const coffees = coffeesCollection.collection("coffees");
 
-    //Get data from client and transfer to database
+    // Get data from client and transfer to database
     app.post('/coffees', async(req, res) => {
         const newCoffee = req.body;
         // Insert the defined document into the "coffees" collection
         const result = await coffees.insertOne(newCoffee);
+        res.send(result);
+    })
+
+    // Get data from database and transfer to client
+    app.get('/coffees', async(req, res) => {
+        // Execute query
+        const cursor = coffees.find(); // If any sorting functionality, add here
+        const result = await cursor.toArray();
         res.send(result);
     })
 
