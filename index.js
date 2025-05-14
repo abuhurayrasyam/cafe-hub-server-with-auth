@@ -45,6 +45,14 @@ async function run() {
         res.send(result);
     })
 
+    // Get a single data from database and transfer to client
+    app.get('/coffees/:id', async(req, res) => {
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)};
+        const result = await coffees.findOne(query);
+        res.send(result);
+    })
+
     // Delete a Coffee From Database
     app.delete('/coffees/:id', async (req, res) => {
         const id = req.params.id;
