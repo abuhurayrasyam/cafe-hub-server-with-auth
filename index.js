@@ -24,11 +24,16 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-
+    
     // Connect to the "coffeesdb" database and access its "coffees" collection
     const coffeesCollection = client.db("coffeesdb");
     const coffees = coffeesCollection.collection("coffees");
+    // Connect to the "coffeesdb" database and access its "users" collection
+    const usersCollection = client.db("coffeesdb");
+    const users = usersCollection.collection("users");
 
+
+    // Coffee CRUD
     // Get data from client and transfer to database
     app.post('/coffees', async(req, res) => {
         const newCoffee = req.body;
@@ -72,6 +77,14 @@ async function run() {
         const query = {_id: new ObjectId(id)};
         const result = await coffees.deleteOne(query);
         res.send(result);
+    })
+
+    // User CRUD
+    // Get data from client and transfer to database
+    app.post('/users', async(req, res) => {
+      const newUser = req.body;
+      const result = await users.insertOne(newUser);
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
