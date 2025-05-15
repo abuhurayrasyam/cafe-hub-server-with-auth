@@ -53,6 +53,19 @@ async function run() {
         res.send(result);
     })
 
+    // Get a Coffee from database and transfer to client and update it, after update it transfer to database from client
+    app.put('/coffees/:id', async(req, res) => {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)};
+      const updatedCoffee = req.body;
+      const updatedDoc = {
+        $set: updatedCoffee
+      };
+      const options = {upsert: true};
+      const result = await coffees.updateOne(filter, updatedDoc, options);
+      res.send(result);
+    })
+
     // Delete a Coffee From Database
     app.delete('/coffees/:id', async (req, res) => {
         const id = req.params.id;
