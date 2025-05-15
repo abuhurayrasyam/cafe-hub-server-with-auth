@@ -93,6 +93,19 @@ async function run() {
         res.send(result);
     })
 
+    // update lastSignInTime in db (single data)
+    app.patch('/users', async(req, res) => {
+      const {email, lastSignInTime} = req.body;
+      const filter = {email: email};
+      const updatedDoc = {
+        $set: {
+          lastSignInTime: lastSignInTime
+        }
+      };
+      const result = await users.updateOne(filter, updatedDoc);
+      res.send(result);
+    })
+
     // Delete a Coffee From Database
     app.delete('/users/:id', async (req, res) => {
         const id = req.params.id;
