@@ -88,8 +88,28 @@ async function run() {
     })
 
     // Get data from database and transfer to client
+    // app.get('/users', async(req, res) => {
+    //     const result = await users.find().toArray();
+    //     res.send(result);
+    // })
+
+    // Get data from database and transfer to client with search functionality
     app.get('/users', async(req, res) => {
-        const result = await users.find().toArray();
+        const {searchQuery} = req.query;
+        let query = {};
+        if(searchQuery){
+          // query = {name: {$regex: searchQuery, $options: "i"}} // Single Query
+          query = {
+            $or: [
+              { name: { $regex: searchQuery, $options: "i" } },
+              { email: { $regex: searchQuery, $options: "i" } },
+              { phoneNumber: { $regex: searchQuery, $options: "i" } },
+              { address: { $regex: searchQuery, $options: "i" } }
+            ]
+          }
+        }
+
+        const result = await users.find(query).toArray();
         res.send(result);
     })
 
